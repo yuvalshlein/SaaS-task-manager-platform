@@ -5,11 +5,11 @@ import java.time.temporal.ChronoUnit;
 
 public class BugTask extends Task {
 
-    private static final int MIN_SEVERITY       = 1;
-    private static final int MAX_SEVERITY       = 5;
-    private static final double PRIORITY_MULTIPLIER  = 10.0;
-    private static final double SEVERITY_MULTIPLIER  = 2.0;
-    private static final double URGENCY_WINDOW       = 30.0;
+    private static final int MIN_SEVERITY = 1;
+    private static final int MAX_SEVERITY = 5;
+    private static final double PRIORITY_MULTIPLIER = 10.0;
+    private static final double SEVERITY_MULTIPLIER = 2.0;
+    private static final double URGENCY_WINDOW = 30.0;
 
     private final int severity;
 
