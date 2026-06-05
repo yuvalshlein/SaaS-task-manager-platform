@@ -7,22 +7,22 @@ import java.util.*;
 
 public class Organization {
 
+    private static final int ID_LENGTH = 8;
+
     private final String id;
     private final String name;
     private SubscriptionTier tier;
-
     private final Map<String, User> users    = new HashMap<>();
     private final PriorityQueue<Task> taskHeap = new PriorityQueue<>(); // max-heap via Task.compareTo
     private final Map<String, Task> tasksMap   = new HashMap<>();
-
     private SchedulingStrategy strategy;
     private final List<SchedulingObserver> observers = new ArrayList<>();
 
     public Organization(String name, SchedulingStrategy strategy, SubscriptionTier tier) {
-        this.id       = UUID.randomUUID().toString().substring(0, 8);
-        this.name     = name;
+        this.id = UUID.randomUUID().toString().substring(0, ID_LENGTH);
+        this.name = name;
         this.strategy = strategy != null ? strategy : new PriorityBasedStrategy();
-        this.tier     = tier;
+        this.tier = tier;
     }
 
     public Organization(String name, SchedulingStrategy strategy) {
@@ -31,20 +31,20 @@ public class Organization {
 
     // -- User management --
 
-    public void addUser(User user) {
+    public void addUser(User user) throws IllegalArgumentException {
         if (users.containsKey(user.getId()))
             throw new IllegalArgumentException("User '" + user.getId() + "' already belongs to '" + name + "'");
         users.put(user.getId(), user);
     }
 
-    public User getUser(String userId) {
+    public User getUser(String userId) throws NoSuchElementException {
         User user = users.get(userId);
         if (user == null)
             throw new NoSuchElementException("User '" + userId + "' not found in organization '" + name + "'");
         return user;
     }
 
-    public void removeUser(String userId) {
+    public void removeUser(String userId) throws NoSuchElementException {
         if (!users.containsKey(userId))
             throw new NoSuchElementException("User '" + userId + "' not found in organization '" + name + "'");
         users.remove(userId);
@@ -54,7 +54,7 @@ public class Organization {
 
     // -- Task management --
 
-    public void addTask(Task task) {
+    public void addTask(Task task) throws IllegalArgumentException {
         if (tasksMap.containsKey(task.getId()))
             throw new IllegalArgumentException("Task '" + task.getId() + "' already exists in '" + name + "'");
         taskHeap.offer(task);
@@ -63,13 +63,18 @@ public class Organization {
 
     public Task peekTopTask() { return taskHeap.peek(); }
 
-    public Task popTopTask() {
+    public Task popTopTask() throws NoSuchElementException {
         Task task = taskHeap.poll();
         if (task != null) tasksMap.remove(task.getId());
         return task;
     }
 
-    public Task getTask(String taskId) { return tasksMap.get(taskId); }
+    public Task getTask(String taskId) throws NoSuchElementException {
+        Task task = tasksMap.get(taskId);
+        if (task == null)
+            throw new NoSuchElementException("Task '" + taskId + "' not found in organization '" + name + "'");
+        return task;
+    }
 
     public List<Task> listTasks() {
         List<Task> sorted = new ArrayList<>(taskHeap);
@@ -107,8 +112,8 @@ public class Organization {
 
     // -- Getters --
 
-    public String getId()             { return id; }
-    public String getName()           { return name; }
+    public String getId() { return id; }
+    public String getName() { return name; }
     public SubscriptionTier getTier() { return tier; }
 
     @Override

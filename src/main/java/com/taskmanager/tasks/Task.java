@@ -5,6 +5,8 @@ import java.util.UUID;
 
 public abstract class Task implements Comparable<Task> {
 
+    private static final int ID_LENGTH = 8;
+
     protected final String id;
     protected final String title;
     protected final String description;
@@ -16,7 +18,7 @@ public abstract class Task implements Comparable<Task> {
 
     protected Task(String title, String description, Priority priority,
                    LocalDateTime deadline, double estimatedHours, String assignedTo) {
-        this.id             = UUID.randomUUID().toString().substring(0, 8);
+        this.id             = UUID.randomUUID().toString().substring(0, ID_LENGTH);
         this.title          = title;
         this.description    = description;
         this.priority       = priority;
@@ -52,9 +54,9 @@ public abstract class Task implements Comparable<Task> {
             deadline.toLocalDate(), estimatedHours, priorityScore());
     }
 
-    public String getId()               { return id; }
-    public String getTitle()            { return title; }
-    public Priority getPriority()       { return priority; }
-    public LocalDateTime getDeadline()  { return deadline; }
-    public double getEstimatedHours()   { return estimatedHours; }
+    public String getId() { return id; }
+    public String getTitle() { return title; }
+    public Priority getPriority() { return priority; }
+    public LocalDateTime getDeadline() { return deadline; }
+    public double getEstimatedHours() { return estimatedHours; }
 }
