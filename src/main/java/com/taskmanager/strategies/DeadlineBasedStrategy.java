@@ -28,7 +28,7 @@ public class DeadlineBasedStrategy extends SchedulingStrategy {
 
         for (Task task : ordered) {
             User target = minLoadUser(active, workload);
-            workload.merge(target.getId(), task.getEstimatedHours(), Double::sum); #add the estimated hours or set it  not present
+            workload.merge(target.getId(), task.getEstimatedHours(), Double::sum); // add the estimated hours or set it not present
 
             schedule.add(new ScheduleEntry(
                 target.getId(), target.getName(),
